@@ -2,6 +2,8 @@
 name = "rsautogui"
 version = "0.1.0"
 edition = "2021"
+keywords = ["mouse", "keyboard", "screen", "gui", "automation"]
+categories = ["computer-vision", "development-tools", "api-bindings"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
