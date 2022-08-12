@@ -1,10 +1,12 @@
 [package]
 name = "rsautogui"
+description = "rsautogui aims to be a cross-platform GUI automation rust crate."
 version = "0.1.0"
 edition = "2021"
 keywords = ["mouse", "keyboard", "screen", "gui", "automation"]
 categories = ["computer-vision", "development-tools", "api-bindings"]
-exclude = [".*"]
+license-file = "LICENSE"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
