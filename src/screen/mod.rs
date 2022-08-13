@@ -2,11 +2,11 @@
 //!
 //! `screen` is a collection of functions used to get screen related information.
 
-use image::{ImageBuffer, RgbaImage};
+use image::RgbaImage;
 use scrap::{Capturer, Display};
 use std::{thread, time};
 
-pub use image::Rgba;
+pub use image::{Rgba, ImageBuffer};
 
 /// Returns the width and height of primary screen.
 pub fn size() -> (u16, u16) {
