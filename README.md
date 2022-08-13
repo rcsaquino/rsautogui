@@ -16,7 +16,7 @@
 use rsautogui::{mouse, mouse::MouseButton};
 
 fn main() {
-    let pos = mouse::position(); // Returns the current mouse coordinates -> (i32, i32)
+    let pos = mouse::position(); // Returns the current mouse coordinates -> (u16, u16)
 
     mouse::move_to(500, 500); // Moves mouse to x, y instantly.
     mouse::move_rel(500, 500); // Moves mouse to x, y relative to its position instantly.
