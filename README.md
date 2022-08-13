@@ -25,7 +25,7 @@ fn main() {
 
     mouse::click(MouseButton::Left); // Performs a mouse click with the specified button.
     mouse::down(MouseButton::Left); // Performs a mouse down with the specified button.
-    mouse::click(MouseButton::Left); // Performs a mouse up with the specified button.
+    mouse::up(MouseButton::Left); // Performs a mouse up with the specified button.
     mouse::scroll('x', 10); // Scrolls x or y axis n times.
 }
 ```
