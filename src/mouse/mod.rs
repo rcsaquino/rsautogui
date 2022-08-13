@@ -6,33 +6,34 @@ pub use enigo::MouseButton;
 use enigo::{Enigo, MouseControllable};
 
 /// Returns the current mouse coordinates.
-pub fn position() -> (i32, i32) {
-    Enigo::mouse_location()
+pub fn position() -> (u16, u16) {
+    let pos = Enigo::mouse_location();
+    return (pos.0.try_into().unwrap(), pos.1.try_into().unwrap());
 }
 
 /// Moves mouse to x, y instantly.
-pub fn move_to(x: i32, y: i32) {
+pub fn move_to(x: u16, y: u16) {
     let mut enigo = Enigo::new();
-    enigo.mouse_move_to(x, y)
+    enigo.mouse_move_to(x.try_into().unwrap(), y.try_into().unwrap())
 }
 
 // Moves mouse to x, y with the specified time in ms
 // fn slow_move_to() {}
 
 /// Moves mouse to x, y relative to its position instantly.
-pub fn move_rel(x: i32, y: i32) {
+pub fn move_rel(x: u16, y: u16) {
     let mut enigo = Enigo::new();
-    enigo.mouse_move_relative(x, y)
+    enigo.mouse_move_relative(x.try_into().unwrap(), y.try_into().unwrap())
 }
 
 // Moves mouse to x, y relative to its position with the specified time in ms
 // fn slow_move_rel() {}
 
 /// Drags mouse to x, y instantly.
-pub fn drag_to(x: i32, y: i32) {
+pub fn drag_to(x: u16, y: u16) {
     let mut enigo = Enigo::new();
     enigo.mouse_down(MouseButton::Left);
-    enigo.mouse_move_to(x, y);
+    enigo.mouse_move_to(x.try_into().unwrap(), y.try_into().unwrap());
     enigo.mouse_up(MouseButton::Left)
 }
 
@@ -40,17 +41,17 @@ pub fn drag_to(x: i32, y: i32) {
 // fn slow_drag_to() {}
 
 /// Drags mouse to x, y relative to its position instantly.
-pub fn drag_rel(x: i32, y: i32) {
+pub fn drag_rel(x: u16, y: u16) {
     let mut enigo = Enigo::new();
     enigo.mouse_down(MouseButton::Left);
-    enigo.mouse_move_relative(x, y);
+    enigo.mouse_move_relative(x.try_into().unwrap(), y.try_into().unwrap());
     enigo.mouse_up(MouseButton::Left)
 }
 
 // Drags mouse to x, y relative to its position with the specified time in ms
 // fn slow_drag_rel() {}
 
-/// Performs a mouse click.
+/// Performs a mouse click with the specified button.
 pub fn click(button: MouseButton) {
     let mut enigo = Enigo::new();
     enigo.mouse_click(button);

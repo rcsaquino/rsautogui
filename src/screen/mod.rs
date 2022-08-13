@@ -14,14 +14,18 @@ pub fn size() -> (u16, u16) {
     return (display.width() as u16, display.height() as u16);
 }
 
-/// Verifies if x & y coordinates are present on primary screen.
+/// Verifies if specified x & y coordinates are present on primary screen.
 pub fn on_screen(x: u16, y: u16) -> bool {
     let display = size();
-    return x < display.0 && y < display.1;
+    return x <= display.0 && y <= display.1;
 }
 
 /// Returns screenshot of the primary screen.
 pub fn screenshot(width: u16, height: u16) -> ImageBuffer<Rgba<u8>, Vec<u8>> {
+    if !on_screen(width, height) {
+        panic!("Specified height and/or width are greater than screen size. Use screen::size() to check current screen size.")
+    }
+    
     let mut screen = Capturer::new(Display::primary().expect("Couldn't find display"))
         .expect("Couldn't capture screen");
 
@@ -51,9 +55,11 @@ pub fn screenshot(width: u16, height: u16) -> ImageBuffer<Rgba<u8>, Vec<u8>> {
     return img;
 }
 
-/// Saves the provided screenshot as a file with the specified extension.
+/// Saves the provided screenshot to a path with the specified filename and extension.
 pub fn printscreen(screenshot: &ImageBuffer<Rgba<u8>, Vec<u8>>, path: &str) {
-    screenshot.save(path).unwrap();
+    screenshot
+        .save(path)
+        .expect("Error saving file to specified path, filename, and/or extension.");
 }
 
 /// Locates the first pixel color similar to the one specified and returns its coordinate.
