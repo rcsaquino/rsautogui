@@ -1,7 +1,7 @@
 [package]
 name = "rsautogui"
 description = "rsautogui aims to be a cross-platform GUI automation rust crate."
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 keywords = ["mouse", "keyboard", "screen", "pyautogui", "automation"]
 categories = ["computer-vision", "development-tools", "api-bindings"]
