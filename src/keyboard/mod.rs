@@ -8,28 +8,28 @@ use std::collections::HashMap;
 
 /// Simulates typing the string provided.
 pub fn typewrite(string: &str) {
-    let mut unique_keys: HashMap<String, String> = HashMap::new();
-    unique_keys.insert('~'.to_string(), '`'.to_string());
-    unique_keys.insert('!'.to_string(), '1'.to_string());
-    unique_keys.insert('@'.to_string(), '2'.to_string());
-    unique_keys.insert('#'.to_string(), '3'.to_string());
-    unique_keys.insert('$'.to_string(), '4'.to_string());
-    unique_keys.insert('%'.to_string(), '5'.to_string());
-    unique_keys.insert('^'.to_string(), '6'.to_string());
-    unique_keys.insert('&'.to_string(), '7'.to_string());
-    unique_keys.insert('*'.to_string(), '8'.to_string());
-    unique_keys.insert('('.to_string(), '9'.to_string());
-    unique_keys.insert(')'.to_string(), '0'.to_string());
-    unique_keys.insert('_'.to_string(), '-'.to_string());
-    unique_keys.insert('+'.to_string(), '='.to_string());
-    unique_keys.insert('{'.to_string(), '['.to_string());
-    unique_keys.insert('}'.to_string(), ']'.to_string());
-    unique_keys.insert('|'.to_string(), '\\'.to_string());
-    unique_keys.insert(':'.to_string(), ';'.to_string());
-    unique_keys.insert('\''.to_string(), '\''.to_string());
-    unique_keys.insert('<'.to_string(), ','.to_string());
-    unique_keys.insert('>'.to_string(), '.'.to_string());
-    unique_keys.insert('?'.to_string(), '/'.to_string());
+    let mut unique_keys: HashMap<char, char> = HashMap::new();
+    unique_keys.insert('~', '`');
+    unique_keys.insert('!', '1');
+    unique_keys.insert('@', '2');
+    unique_keys.insert('#', '3');
+    unique_keys.insert('$', '4');
+    unique_keys.insert('%', '5');
+    unique_keys.insert('^', '6');
+    unique_keys.insert('&', '7');
+    unique_keys.insert('*', '8');
+    unique_keys.insert('(', '9');
+    unique_keys.insert(')', '0');
+    unique_keys.insert('_', '-');
+    unique_keys.insert('+', '=');
+    unique_keys.insert('{', '[');
+    unique_keys.insert('}', ']');
+    unique_keys.insert('|', '\\');
+    unique_keys.insert(':', ';');
+    unique_keys.insert('\'', '\'');
+    unique_keys.insert('<', ',');
+    unique_keys.insert('>', '.');
+    unique_keys.insert('?', '/');
 
     let mut sequence = String::new();
     for letter in string.chars() {
@@ -37,8 +37,8 @@ pub fn typewrite(string: &str) {
             let prep_letter =
                 "{+SHIFT}".to_string() + &letter.to_lowercase().to_string() + "{-SHIFT}";
             sequence.push_str(&prep_letter);
-        } else if let Some(value) = unique_keys.get(&letter.to_string()) {
-            let prep_letter = "{+SHIFT}".to_string() + value + "{-SHIFT}";
+        } else if let Some(val) = unique_keys.get(&letter) {
+            let prep_letter = "{+SHIFT}".to_string() + &val.to_string() + "{-SHIFT}";
             sequence.push_str(&prep_letter);
         } else {
             sequence.push(letter)
