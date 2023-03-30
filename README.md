@@ -43,13 +43,13 @@ fn main() {
 ```
 ## Screen
 ```rust
-use rsautogui::screen::{self, Rgba, ImageBuffer};
+use rsautogui::screen::{self, Rgba, DynamicImage};
 
 fn main() {
     let size: (u16, u16) = screen::size(); // Returns the width and height of primary screen.
     let on_screen: bool = screen::on_screen(1920, 1080); // Verifies if specified x & y coordinates are present on primary screen.
 
-    let ss: ImageBuffer<Rgba<u8>, Vec<u8>> = screen::screenshot(0, 0, 1920, 1080); // Returns screenshot of the primary screen.
+    let ss: DynamicImage = screen::screenshot(0, 0, 1920, 1080); // Returns screenshot of the primary screen.
     screen::printscreen(&ss, "./src/assets/screenshot.jpg"); // Saves the provided screenshot to a path with the specified filename and extension.
 
     let loc: Option<(u16, u16)> = screen::locate_pixel(screen::Rgba([255, 255, 255, 255])); // Locates the first pixel color similar to the one specified and returns its coordinate.

@@ -39,8 +39,8 @@ pub fn screenshot(x: u16, y: u16, width: u16, height: u16) -> DynamicImage {
 }
 
 /// Saves the provided screenshot to a path with the specified filename and extension.
-pub fn printscreen(screenshot: DynamicImage, path: &str) {
-    screenshot
+pub fn printscreen(&screenshot: DynamicImage, path: &str) {
+    &screenshot
         .save(path)
         .expect("Error saving file to specified path, filename, and/or extension.");
 }
