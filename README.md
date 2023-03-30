@@ -50,7 +50,7 @@ fn main() {
     let on_screen: bool = screen::on_screen(1920, 1080); // Verifies if specified x & y coordinates are present on primary screen.
 
     let ss: DynamicImage = screen::screenshot(0, 0, 1920, 1080); // Returns screenshot of the primary screen.
-    screen::printscreen(&ss, "./src/assets/screenshot.jpg"); // Saves the provided screenshot to a path with the specified filename and extension.
+    screen::printscreen(ss, "./src/assets/screenshot.jpg"); // Saves the provided screenshot to a path with the specified filename and extension.
 
     let loc: Option<(u16, u16)> = screen::locate_pixel(screen::Rgba([255, 255, 255, 255])); // Locates the first pixel color similar to the one specified and returns its coordinate.
     let loc: Vec<(u16, u16)> = screen::locate_all_pixel(screen::Rgba([255, 255, 255, 255])); // Locates all pixel colors similar to the one specified and returns their coordinates.
