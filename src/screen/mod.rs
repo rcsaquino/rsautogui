@@ -1,6 +1,7 @@
 //! # Screen Information
 //!
 //! `screen` is a collection of functions used to get screen related information.
+
 pub use image::{DynamicImage, GenericImageView, Rgba};
 pub use screenshots::{DisplayInfo, Screen};
 
