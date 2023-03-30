@@ -7,7 +7,8 @@ use enigo::{Enigo, MouseControllable};
 
 /// Returns the current mouse coordinates.
 pub fn position() -> (u16, u16) {
-    let pos = Enigo::mouse_location();
+    let enigo = Enigo::new();
+    let pos = enigo.mouse_location();
     return (pos.0.try_into().unwrap(), pos.1.try_into().unwrap());
 }
 

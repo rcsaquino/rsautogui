@@ -1,7 +1,7 @@
 [package]
 name = "rsautogui"
 description = "rsautogui aims to be a cross-platform GUI automation rust crate."
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 keywords = ["mouse", "keyboard", "screen", "pyautogui", "automation"]
 categories = ["computer-vision", "development-tools", "api-bindings"]
@@ -14,9 +14,9 @@ documentation = "https://docs.rs/rsautogui"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-enigo = "0.0.14"
-scrap = "0.5.0"
-image = "0.24.1"
+enigo = "0.1.0"
+screenshots = "0.5.3"
+image = "0.24.6"
 
 [profile.dev]
 opt-level = 0
