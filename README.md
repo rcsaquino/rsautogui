@@ -1,47 +1,63 @@
 # rsautogui
- * `rsautogui` aims to be a cross-platform GUI automation rust crate.
- * It lets you control the mouse and keyboard to automate interactions with other applications.
- * Currently, it's a wrapper of multiple rust crates to have pyautogui inspired syntax written in rust.
 
- 
+- `rsautogui` aims to be a cross-platform GUI automation rust crate.
+- It lets you control the mouse and keyboard to automate interactions with other applications.
+- Currently, it's a wrapper of multiple rust crates to have pyautogui inspired syntax written in rust.
+
 > **Warning**
 > Not tested on Linux and MacOS
- 
- ---
+
+---
 
 # Example Usage
 
 ## Mouse
+
 ```rust
-use rsautogui::{mouse, mouse::MouseButton};
+use rsautogui::{mouse, mouse::Speed, mouse::Button, mouse::ScrollAxis};
 
 fn main() {
     let pos: (u16, u16) = mouse::position(); // Returns the current mouse coordinates.
 
     mouse::move_to(500, 500); // Moves mouse to x, y instantly.
-    mouse::move_rel(500, 500); // Moves mouse to x, y relative to its position instantly.
-    mouse::drag_to(500, 500); // Drags mouse to x, y instantly.
-    mouse::drag_rel(500, 500); // Drags mouse to x, y relative to its position instantly.
+    mouse::slow_move_to(500, 500, Speed::Faster); // Moves mouse to x, y with the specified speed.
 
-    mouse::click(MouseButton::Left); // Performs a mouse click with the specified button.
-    mouse::down(MouseButton::Left); // Performs a mouse down with the specified button.
-    mouse::up(MouseButton::Left); // Performs a mouse up with the specified button.
-    mouse::scroll('x', 10); // Scrolls x or y axis n times.
+    mouse::move_rel(500, 500); // Moves mouse to x, y relative to current position instantly.
+    mouse::slow_move_rel(500, 500, Speed::Fast); // Moves mouse to x, y relative to current position with the specified speed.
+
+    mouse::drag_to(500, 500); // Drags mouse to x, y instantly.
+    mouse::slow_drag_to(500, 500, Speed::Slow); // Drags mouse to x, y with the specified speed.
+
+    mouse::drag_rel(500, 500); // Drags mouse to x, y relative to its position instantly.
+    mouse::slow_drag_rel(500, 500, Speed::Slower); // Drags mouse to x, y relative to its position with the specified speed.
+
+    mouse::click(Button::Left); // Performs a mouse click with the specified button.
+    mouse::down(Button::Left); // Performs a mouse down with the specified button.
+    mouse::up(Button::Left); // Performs a mouse up with the specified button.
+    mouse::scroll(ScrollAxis::Y, 10); // Scrolls x or y axis n times.
 }
 ```
+
 ## Keyboard
+
 ```rust
-use rsautogui::keyboard::{self, Key};
+use rsautogui::{keyboard, keyboard::Vk};
 
 fn main() {
-    keyboard::typewrite("lorem ipsum"); // Simulates typing the string provided.
+    keyboard::typewrite("Lorem ipsum!"); // Simulates typing the string provided.
 
-    keyboard::key_down(Key::Layout('a')); // Presses specified key down.
-    keyboard::key_up(Key::Layout('a')); // Releases specified key up.
-    keyboard::key_tap(Key::Layout('a')); // Performs specified key up and down.
+    // Print `A`
+    keyboard::key_down(Vk::Shift); // Presses specified key down.
+    keyboard::key_tap(Vk::A); // Performs specified key_down and key_up.
+    keyboard::key_up(Vk::Shift); // Releases specified key up.
+
+    // Do the same with one line
+    keyboard::key_tap('A');
 }
 ```
+
 ## Screen
+
 ```rust
 use rsautogui::screen::{self, Rgba, DynamicImage};
 
@@ -57,5 +73,7 @@ fn main() {
     let pixel: Rgba<u8> = screen::get_pixel(500, 500); // Get the pixel color on x, y coordinate.
 }
 ```
+
 ---
+
 You can read more documentation of this crate in [`docs.rs`](https://docs.rs/rsautogui/).
