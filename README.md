@@ -9,6 +9,12 @@
 
 ---
 
+# Installation
+Run the following Cargo command in your project directory:
+```
+cargo add rsautogui
+```
+
 # Example Usage
 
 ## Mouse
