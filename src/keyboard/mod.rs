@@ -6,9 +6,6 @@ use winput::Keylike;
 
 pub use winput::Vk;
 
-#[deprecated(since="0.2.0", note="Please use virtual key enum `Vk` instead.")]
-pub use winput::Vk as Key;
-
 /// Simulates typing the string provided.
 pub fn typewrite(string: &str) {
     winput::send_str(string);
