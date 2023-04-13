@@ -46,12 +46,12 @@ use rsautogui::{keyboard, keyboard::Vk};
 fn main() {
     keyboard::typewrite("Lorem ipsum!"); // Simulates typing the string provided.
 
-    // Print `A`
+    // Print `A` using virtual key `Vk`
     keyboard::key_down(Vk::Shift); // Presses specified key down.
     keyboard::key_tap(Vk::A); // Performs specified key_down and key_up.
     keyboard::key_up(Vk::Shift); // Releases specified key up.
 
-    // Do the same with one line
+    // Print `A` with one line
     keyboard::key_tap('A');
 }
 ```
