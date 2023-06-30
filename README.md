@@ -9,9 +9,13 @@ locate_img_center(img: &DynamicImage, region: Option<(u16, u16, u16, u16)>, min_
 locate_img(img: &DynamicImage, region: Option<(u16, u16, u16, u16)>, min_confidence: Option<f32>, tolerance: Option<u8>) 
 ```
 **img**: required borrowed DynamicImage
+
 **region**: requires tuple BoundingBox (x, y, width, height) (Default Entire Screen)
+
 **min_confidence**: 0.1 - 1.0, percentage of how many of the pixels need to match (Default 0.95)
+
 **tolerance**: 0 - 255, range of pixels to accept from image's pixels. So if an image has a pixel of 234, 52, 245 with a tolerance of 10, then the locator will accept values ranging from 224, 42, 235 - 244, 62, 255. (Default 5)
+
 
 All of these requires (except img) are optional and require either a **Some()** or **None**
 
