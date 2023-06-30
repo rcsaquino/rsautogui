@@ -1,85 +1,40 @@
-# rsautogui
+# rsautogui [Image-Recognition-Branch]
+This branch is used to hold the image-recongnition until successfully merged into rsautogui.
 
-- `rsautogui` aims to be a cross-platform GUI automation rust crate.
-- It lets you control the mouse and keyboard to automate interactions with other applications.
-- Currently, it's a wrapper of multiple rust crates to have pyautogui inspired syntax written in rust.
+Created and implemented the first image recognition for rsautogui. It can search the entire screen a over 5x faster than pyautogui and does not require OpenCV for options like Confidence. I've also added an option called Tolerance that allows for leniency with pixel colors that are close to the original image's. Written in pure Rust.
 
-> **Warning**
-> Not tested on Linux and MacOS
+locate_img_center(img: &DynamicImage, region: Option<(u16, u16, u16, u16)>, min_confidence: Option<f32>, tolerance: Option<u8>) -> Option<(u32, u32, f32)>)
+locate_img(img: &DynamicImage, region: Option<(u16, u16, u16, u16)>, min_confidence: Option<f32>, tolerance: Option<u8>) 
+img: required borrowed DynamicImage
+region: requires tuple BoundingBox (x, y, width, height) (Default Entire Screen)
+min_confidence: 0.1 - 1.0, percentage of how many of the pixels need to match (Default 0.95)
+tolerance: 0 - 255, range of pixels to accept from image's pixels. So if an image has a pixel of 234, 52, 245 with a tolerance of 10, then the locator will accept values ranging from 224, 42, 235 - 244, 62, 255. (Default 5)
 
----
+All of these requires (except img) are optional and require either a Some() or None
 
-# Installation
-Run the following Cargo command in your project directory:
-```
-cargo add rsautogui
-```
-
-# Example Usage
-
-## Mouse
-
+Examples:
 ```rust
-use rsautogui::{mouse, mouse::Speed, mouse::Button, mouse::ScrollAxis};
-
 fn main() {
-    let pos: (u16, u16) = mouse::position(); // Returns the current mouse coordinates.
-
-    mouse::move_to(500, 500); // Moves mouse to x, y instantly.
-    mouse::slow_move_to(500, 500, Speed::Faster); // Moves mouse to x, y with the specified speed.
-
-    mouse::move_rel(500, 500); // Moves mouse to x, y relative to current position instantly.
-    mouse::slow_move_rel(500, 500, Speed::Fast); // Moves mouse to x, y relative to current position with the specified speed.
-
-    mouse::drag_to(500, 500); // Drags mouse to x, y instantly.
-    mouse::slow_drag_to(500, 500, Speed::Slow); // Drags mouse to x, y with the specified speed.
-
-    mouse::drag_rel(500, 500); // Drags mouse to x, y relative to its position instantly.
-    mouse::slow_drag_rel(500, 500, Speed::Slower); // Drags mouse to x, y relative to its position with the specified speed.
-
-    mouse::click(Button::Left); // Performs a mouse click with the specified button.
-    mouse::down(Button::Left); // Performs a mouse down with the specified button.
-    mouse::up(Button::Left); // Performs a mouse up with the specified button.
-    mouse::scroll(ScrollAxis::Y, 10); // Scrolls x or y axis n times.
+    let img = image::open("images.png").expect("Unable to locate file.");    
+    match locate_img_center(&img, None, Some(0.9), Some(10)) {
+        Some((x, y, confidence)) => {
+            println!("Image center found at {}, {} with confidence {}", x, y, confidence);
+            move_to(x.try_into().unwrap(), y.try_into().unwrap())
+        },
+        None => println!("Image not found"),
+    }
 }
 ```
-
-## Keyboard
-
 ```rust
-use rsautogui::{keyboard, keyboard::Vk};
-
 fn main() {
-    keyboard::typewrite("Lorem ipsum!"); // Simulates typing the string provided.
-
-    // Print `A` using virtual key `Vk`
-    keyboard::key_down(Vk::Shift); // Presses specified key down.
-    keyboard::key_tap(Vk::A); // Performs specified key_down and key_up.
-    keyboard::key_up(Vk::Shift); // Releases specified key up.
-
-    // Print `A` with one line
-    keyboard::key_tap('A');
+    let img = image::open("images.png").expect("Unable to locate file.");
+    match locate_image(&img, None, None, None) {
+        Some((x, y, img_width, img_height, _confidence)) => {
+            println!("x: {}, y: {}, width: {}, height: {}",x, y, img_width, img_height)
+        },
+        None => println!("Image not found")
+    }
 }
 ```
-
-## Screen
-
-```rust
-use rsautogui::screen::{self, Rgba, DynamicImage};
-
-fn main() {
-    let size: (u16, u16) = screen::size(); // Returns the width and height of primary screen.
-    let on_screen: bool = screen::on_screen(1920, 1080); // Verifies if specified x & y coordinates are present on primary screen.
-
-    let ss: DynamicImage = screen::screenshot(0, 0, 1920, 1080); // Returns screenshot of the primary screen.
-    screen::printscreen(ss, "./src/assets/screenshot.jpg"); // Saves the provided screenshot to a path with the specified filename and extension.
-
-    let loc: Option<(u16, u16)> = screen::locate_pixel(screen::Rgba([255, 255, 255, 255])); // Locates the first pixel color similar to the one specified and returns its coordinate.
-    let loc: Vec<(u16, u16)> = screen::locate_all_pixel(screen::Rgba([255, 255, 255, 255])); // Locates all pixel colors similar to the one specified and returns their coordinates.
-    let pixel: Rgba<u8> = screen::get_pixel(500, 500); // Get the pixel color on x, y coordinate.
-}
-```
-
----
-
-You can read more documentation of this crate in [`docs.rs`](https://docs.rs/rsautogui/).
+Searches a 1920 x 1080px screen in around 58ms (cpu dependent). Pyautogui takes around 402ms. 
+Early version of this had incredible speed during development.  But as new features were added and simplicity introduced, started to slow down itself.
