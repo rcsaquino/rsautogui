@@ -195,7 +195,7 @@ pub fn locate_img(img: &DynamicImage, region: Option<(u16, u16, u16, u16)>, min_
 
 
 // Locates an image on screen and returns the center of BoundingBox relative to screen size (returns x, y) (Main)
-fn locate_img_center(img: &DynamicImage, region: Option<(u16, u16, u16, u16)>, min_confidence: Option<f32>, tolerance: Option<u8>) -> Option<(u32, u32, f32)> {
+pub fn locate_img_center(img: &DynamicImage, region: Option<(u16, u16, u16, u16)>, min_confidence: Option<f32>, tolerance: Option<u8>) -> Option<(u32, u32, f32)> {
     // Default values
     let (x, y, width, height) = region.unwrap_or((0, 0, size().0, size().1));
     let min_confidence = min_confidence.unwrap_or(0.75);
