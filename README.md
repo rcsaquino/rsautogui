@@ -1,7 +1,7 @@
 # rsautogui [Image-Recognition-Branch]
 This branch is used to hold the image-recognition until successfully merged into rsautogui.
 
-Created and implemented the first image recognition for rsautogui. It can search the entire screen a over 5x faster than pyautogui and does not require OpenCV for options like Confidence. I've also added an option called Tolerance that allows for leniency with pixel colors that are close to the original image's. Written in pure Rust.
+Created and implemented the first image recognition for rsautogui. It can search the entire screen a over 3x faster than pyautogui and does not require OpenCV for options like Confidence. I've also added an option called Tolerance that allows for leniency with pixel colors that are close to the original image's. Written in pure Rust.
 ```rust
 locate_img_center(img: &DynamicImage, region: Option<(u16, u16, u16, u16)>, min_confidence: Option<f32>, tolerance: Option<u8>) -> Option<(u32, u32, f32)>)
 ```
@@ -39,5 +39,11 @@ fn main() {
     }
 }
 ```
-Searches a 1920 x 1080px screen in around 58ms (cpu dependent). Pyautogui takes around 402ms. 
 Early version of this had incredible speed during development.  But as new features were added and simplicity introduced, started to slow down itself.
+
+Benchmark
+--------
+**Python**: 150ms
+**Rust**: 53ms
+(Both finding the Rust icon with a size of 225x225px on a 1920x1080 screen)
+
