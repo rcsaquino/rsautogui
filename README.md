@@ -4,7 +4,7 @@
 - It lets you control the mouse and keyboard to automate interactions with other applications.
 - Currently, it's a wrapper of multiple rust crates to have pyautogui inspired syntax written in rust.
 
-> Currently Windows only. Not tested on Linux and MacOS
+> ⚠️ Currently Windows only. Not tested on Linux and MacOS
 
 ---
 
