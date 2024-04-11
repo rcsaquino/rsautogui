@@ -5,7 +5,7 @@
 - Currently, it's a wrapper of multiple rust crates to have pyautogui inspired syntax written in rust.
 
 > **Warning**
-> Not tested on Linux and MacOS
+> Currently Windows only. Not tested on Linux and MacOS
 
 ---
 
