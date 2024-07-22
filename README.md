@@ -1,11 +1,8 @@
 # rsautogui
 
-- `rsautogui` aims to be a cross-platform* GUI automation rust crate.
+- `rsautogui` is a GUI automation rust crate for windows.
 - It lets you control the mouse and keyboard to automate interactions with other applications.
 - Currently, it's a wrapper of multiple rust crates to have pyautogui inspired syntax written in rust.
-
-
-*Currently Windows only. Not tested on Linux and MacOS
 
 ---
 
