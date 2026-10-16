@@ -1,16 +1,40 @@
 # rsautogui
 
-- `rsautogui` is a GUI automation rust crate for windows.
+- `rsautogui` is a cross-platform GUI automation crate for Windows, Linux and macOS.
 - It lets you control the mouse and keyboard to automate interactions with other applications.
-- Currently, it's a wrapper of multiple rust crates to have pyautogui inspired syntax written in rust.
+- It has **zero dependencies**: all OS interaction is direct system FFI
+  (Win32 on Windows, X11/XTest on Linux, CoreGraphics on macOS), and
+  screenshots use a tiny built-in RGBA image type with BMP/PNG encoders.
+- PyAutoGUI-inspired syntax written in Rust.
 
 ---
 
 # Installation
+
 Run the following Cargo command in your project directory:
+
 ```
 cargo add rsautogui
 ```
+
+No other setup is needed on Windows. Platform notes:
+
+- **Linux (X11)**: requires `libX11` + `libXtst` on the system and a running
+  X server (`$DISPLAY`). Building needs the headers too, e.g.
+  `apt install libx11-dev libxtst-dev` (Debian/Ubuntu) or the equivalent.
+- **Linux (Wayland)**: supported natively. Screenshots need
+  `xdg-desktop-portal` with a backend for your compositor (e.g.
+  `xdg-desktop-portal-gnome/-kde/-wlr`, the default on most Wayland
+  desktops). Input uses XWayland automatically when one is running;
+  pure-Wayland sessions (no XWayland) use a kernel `uinput` device, which
+  needs `/dev/uinput` access (e.g. membership in the `input` group plus
+  `KERNEL=="uinput", GROUP="input", MODE="0660"` udev rule, or root).
+  Notes for pure-Wayland sessions: typing is US-ASCII only (Unicode needs
+  XWayland), and `mouse::position()` is tracked internally, so it starts at
+  `(0, 0)` until the first absolute move and cannot see physical mouse
+  movement. Force a backend with `RSAUTOGUI_BACKEND=x11|wayland`.
+- **macOS**: the app needs Accessibility permission (keyboard/mouse) and
+  Screen Recording permission (screenshots).
 
 # Example Usage
 
@@ -44,15 +68,18 @@ fn main() {
 ## Keyboard
 
 ```rust
-use rsautogui::{keyboard, keyboard::Vk};
+use rsautogui::{keyboard, keyboard::Key};
+
+// `Key` keeps Windows virtual-key numbers, so the old `Vk` name still works:
+// `use rsautogui::keyboard::Vk;` is an alias for `Key`.
 
 fn main() {
     keyboard::typewrite("Lorem ipsum!"); // Simulates typing the string provided.
 
-    // Print `A` using virtual key `Vk`
-    keyboard::key_down(Vk::Shift); // Presses specified key down.
-    keyboard::key_tap(Vk::A); // Performs specified key_down and key_up.
-    keyboard::key_up(Vk::Shift); // Releases specified key up.
+    // Print `A` using virtual key `Key`
+    keyboard::key_down(Key::Shift); // Presses specified key down.
+    keyboard::key_tap(Key::A); // Performs specified key_down and key_up.
+    keyboard::key_up(Key::Shift); // Releases specified key up.
 
     // Print `A` with one line
     keyboard::key_tap('A');
@@ -69,14 +96,21 @@ fn main() {
     let on_screen: bool = screen::on_screen(1920, 1080); // Verifies if specified x & y coordinates are present on primary screen.
 
     let ss: DynamicImage = screen::screenshot(0, 0, 1920, 1080); // Returns screenshot of the primary screen.
-    screen::printscreen(ss, "./src/assets/screenshot.jpg"); // Saves the provided screenshot to a path with the specified filename and extension.
+    screen::printscreen(ss, "./screenshot.png"); // Saves as .png, .bmp or .ppm (no JPEG — dependency-free).
 
-    let loc: Option<(u16, u16)> = screen::locate_pixel(screen::Rgba([255, 255, 255, 255])); // Locates the first pixel color similar to the one specified and returns its coordinate.
-    let loc: Vec<(u16, u16)> = screen::locate_all_pixel(screen::Rgba([255, 255, 255, 255])); // Locates all pixel colors similar to the one specified and returns their coordinates.
-    let pixel: Rgba<u8> = screen::get_pixel(500, 500); // Get the pixel color on x, y coordinate.
+    let loc: Option<(u16, u16)> = screen::locate_pixel(Rgba([255, 255, 255, 255])); // Locates the first pixel color equal to the one specified and returns its coordinate.
+    let loc: Vec<(u16, u16)> = screen::locate_all_pixel(Rgba([255, 255, 255, 255])); // Locates all pixel colors equal to the one specified and returns their coordinates.
+    let pixel: Rgba = screen::get_pixel(500, 500); // Get the pixel color on x, y coordinate.
 }
 ```
 
----
+## Documentation
 
 You can read more documentation of this crate in [`docs.rs`](https://docs.rs/rsautogui/).
+
+## Support and contact
+
+If rsautogui is useful to you, you can support its development on
+[Ko-fi](https://ko-fi.com/rcsaquino).
+
+<a href='https://ko-fi.com/rcsaquino' target='_blank'><img height='72' style='border:0px;height:72px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>

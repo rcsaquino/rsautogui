@@ -1,23 +1,23 @@
 [package]
 name = "rsautogui"
-description = "rsautogui aims to be a cross-platform GUI automation rust crate."
-version = "0.2.2"
+description = "Cross-platform GUI automation (mouse, keyboard, screen) with zero dependencies."
+version = "0.3.0"
 edition = "2021"
 keywords = ["mouse", "keyboard", "screen", "pyautogui", "automation"]
-categories = ["computer-vision", "development-tools", "api-bindings"]
+categories = ["development-tools", "api-bindings"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/rcsaquino/rsautogui"
 repository = "https://github.com/rcsaquino/rsautogui"
 documentation = "https://docs.rs/rsautogui"
+rust-version = "1.70"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-screenshots = "0.5.3"
-image = "0.24.6"
-winput = "0.2.5"
-spin_sleep = "1.1.1"
+# No dependencies. All OS interaction is done through direct system
+# FFI (Win32 on Windows, X11/XTest on Linux, CoreGraphics on macOS)
+# plus a tiny built-in image encoder (BMP/PNG).
 
 [profile.dev]
 opt-level = 0
@@ -26,4 +26,4 @@ opt-level = 0
 opt-level = 3
 
 [package.metadata.docs.rs]
-targets = ["x86_64-pc-windows-msvc"]
+targets = ["x86_64-pc-windows-msvc", "x86_64-unknown-linux-gnu", "x86_64-apple-darwin", "aarch64-apple-darwin"]
