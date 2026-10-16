@@ -1,0 +1,78 @@
+# Publishes rsautogui to crates.io.
+#
+# How to release a new version:
+#   1. Bump `version` in Cargo.toml.
+#   2. Create a crates.io API token (https://crates.io/me, scope:
+#      "publish-update") and save it as a repository secret named
+#      CARGO_REGISTRY_TOKEN (Settings -> Secrets and variables -> Actions).
+#      (Alternative: crates.io "Trusted Publishing" via OIDC.)
+#   3. Push a matching tag: `git tag v0.3.0 && git push origin v0.3.0`.
+#
+# The workflow verifies the crate on Linux/Windows/macOS first, checks the
+# tag matches Cargo.toml, then runs `cargo publish`. Manual runs from the
+# Actions tab only verify packaging (`cargo publish --dry-run`).
+
+name: Publish to crates.io
+
+on:
+  push:
+    tags:
+      - "v[0-9]*.[0-9]*.[0-9]*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v4
+
+      - name: Install Linux system dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libx11-dev libxtst-dev
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Clippy (warnings denied)
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Tests
+        run: cargo test
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Publish to crates.io
+        shell: bash
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            TAG="${GITHUB_REF_NAME#v}"
+            VER="$(sed -n 's/^version *= *"\([^"]*\)".*/\1/p' Cargo.toml | head -1)"
+            echo "tag version: $TAG"
+            echo "Cargo.toml version: $VER"
+            if [[ "$TAG" != "$VER" ]]; then
+              echo "::error::Tag v$TAG does not match Cargo.toml version $VER"
+              exit 1
+            fi
+            cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+          else
+            echo "Manual run: verifying packaging only (no upload)."
+            cargo publish --dry-run
+          fi

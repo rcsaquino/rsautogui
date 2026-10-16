@@ -50,6 +50,7 @@ struct HARDWAREINPUT {
 }
 
 #[repr(C)]
+#[derive(Copy, Clone)]
 union INPUT_UNION {
     mi: MOUSEINPUT,
     ki: KEYBDINPUT,
@@ -130,7 +131,6 @@ extern "system" {
     fn GetDC(h_wnd: *mut c_void) -> *mut c_void;
     fn ReleaseDC(h_wnd: *mut c_void, h_dc: *mut c_void) -> c_int;
     fn GetAsyncKeyState(v_key: c_int) -> i16;
-    fn GetKeyState(n_virt_key: c_int) -> i16;
 }
 
 #[link(name = "gdi32")]
@@ -354,10 +354,6 @@ pub(crate) fn typewrite_str(s: &str) {
 
 pub(crate) fn key_is_down(key: Key) -> bool {
     unsafe { (GetAsyncKeyState(key as u16 as c_int) as u16 & 0x8000) != 0 }
-}
-
-pub(crate) fn key_is_toggled(key: Key) -> bool {
-    unsafe { (GetKeyState(key as u16 as c_int) as u16 & 0x0001) != 0 }
 }
 
 // ---------------------------------------------------------------------------
